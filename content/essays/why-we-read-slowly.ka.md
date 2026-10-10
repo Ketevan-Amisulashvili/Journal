@@ -2,7 +2,7 @@
   "title": "\"დასავლეთის ფრონტი უცვლელია\" ერიხ მარია რემარკი",
   "subtitle": "შინაარსი, ანალიზი",
   "urlname": "plot-analysis",
-  "date": "2026-09-18",
+  "date": "2024-08-28",
   "section": "prose",
   "featured": true,
   "draft": false,
