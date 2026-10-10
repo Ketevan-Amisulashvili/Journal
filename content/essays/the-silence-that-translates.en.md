@@ -1,7 +1,7 @@
 {
   "title": "The Silence That Translates",
   "subtitle": "What a poem loses as it crosses from one language into another, and what it finds",
-  "urlname": "the-silence-that-translates",
+  "urlname": "analysis",
   "date": "2026-10-04",
   "section": "prose",
   "featured": true,

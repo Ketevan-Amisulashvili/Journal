@@ -1,7 +1,7 @@
 {
   "title": "\"მდგმური\" ჯემალ ქარჩხაძე",
   "subtitle": "ანალიზი",
-  "urlname": "the-silence-that-translates",
+  "urlname": "analysis",
   "date": "2026-10-04",
   "section": "prose",
   "featured": true,
