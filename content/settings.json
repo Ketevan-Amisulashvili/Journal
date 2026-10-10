@@ -1,10 +1,10 @@
 {
-  "title_ka": "პალიმფსესტი",
-  "title_en": "Palimpsest",
-  "tagline_ka": "ფილოსოფია, პროზა და პოეზია ორ ენაზე",
-  "tagline_en": "Philosophy, prose and poetry in two languages",
-  "author_ka": "ავტორის სახელი",
-  "author_en": "Author Name",
-  "site_url": "",
+  "title_ka": "ანარეკლი",
+  "title_en": "Reflecto",
+  "tagline_ka": "პროზისა და პოეზიის ზედაპირს მიღმა",
+  "tagline_en": "Beneath the surface of prose and poetry",
+  "author_ka": "ქეთევან ამისულაშვილი",
+  "author_en": "Ketevan Amisulashvili",
+  "site_url": "https://journal-d73.pages.dev/",
   "require_comment_review": false
 }
