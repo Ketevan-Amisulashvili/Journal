@@ -1,9 +1,9 @@
 {
   "title": "The Silence That Translates",
-  "urlname": "the-silence-that-translates",
   "subtitle": "What a poem loses as it crosses from one language into another, and what it finds",
+  "urlname": "the-silence-that-translates",
   "date": "2026-10-04",
-  "section": "criticism",
+  "section": "prose",
   "featured": true,
   "draft": false,
   "translator_note": "Translated from the Georgian by the author."
