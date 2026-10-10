@@ -1,0 +1,136 @@
+# Settings for the writing editor at /admin/
+# ONE LINE TO CHANGE: put your GitHub username and repository name after "repo:".
+backend:
+  name: github
+  repo: YOUR-GITHUB-USERNAME/YOUR-REPOSITORY-NAME
+  branch: main
+  commit_messages:
+    create: "New: {{collection}} “{{slug}}”"
+    update: "Edit: {{collection}} “{{slug}}”"
+    delete: "Remove: {{collection}} “{{slug}}”"
+    uploadMedia: "Upload “{{path}}”"
+    deleteMedia: "Delete “{{path}}”"
+
+media_folder: public/images/uploads
+public_folder: /images/uploads
+
+i18n:
+  structure: multiple_files
+  locales: [ka, en]
+  default_locale: ka
+  initial_locales: all
+
+collections:
+  - name: essays
+    label: Essays & criticism
+    label_singular: Essay
+    description: Philosophy, prose and criticism. Write the Georgian first, then switch to English in the language menu at the top of the editor.
+    folder: content/essays
+    create: true
+    format: json-frontmatter
+    extension: md
+    i18n: true
+    identifier_field: title
+    slug: "{{fields.urlname}}"
+    summary: "{{title}}, {{date}}"
+    sortable_fields:
+      fields: [date, title]
+      default: { field: date, direction: descending }
+    view_filters:
+      - { label: Drafts, field: draft, pattern: true }
+    fields:
+      - { name: title, label: Title, widget: string, i18n: true }
+      - { name: subtitle, label: Subtitle (one line under the title), widget: string, required: false, i18n: true }
+      - name: urlname
+        label: Web address
+        hint: "Short, Latin letters and hyphens only, e.g. on-silence. It becomes yoursite/ka/on-silence. Don't change it after publishing."
+        widget: string
+        pattern: ['^[a-z0-9][a-z0-9-]*$', 'Use lowercase Latin letters, numbers and hyphens only']
+        i18n: duplicate
+      - { name: date, label: Date, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD", i18n: duplicate }
+      - name: section
+        label: Section
+        widget: select
+        options:
+          - { label: "Philosophy / ფილოსოფია", value: philosophy }
+          - { label: "Prose / პროზა", value: prose }
+          - { label: "Criticism / კრიტიკა", value: criticism }
+        default: philosophy
+        i18n: duplicate
+      - { name: featured, label: Feature on the front page, widget: boolean, default: false, required: false, i18n: duplicate }
+      - { name: draft, label: Draft (hidden from readers), widget: boolean, default: false, required: false, i18n: duplicate }
+      - name: translator_note
+        label: Translator's note (English only, optional)
+        widget: text
+        required: false
+        i18n: true
+      - name: body
+        label: Text
+        widget: markdown
+        hint: "Footnotes: type [^1] where the note goes, and at the very end a new paragraph starting [^1]: followed by the note."
+        i18n: true
+
+  - name: poems
+    label: Poems
+    label_singular: Poem
+    description: Poems keep every line break as you type it. Leave an empty line between stanzas. Keep the same number of stanzas in both languages so they line up side by side.
+    folder: content/poems
+    create: true
+    format: json-frontmatter
+    extension: md
+    i18n: true
+    identifier_field: title
+    slug: "{{fields.urlname}}"
+    summary: "{{title}}, {{date}}"
+    sortable_fields:
+      fields: [date, title]
+      default: { field: date, direction: descending }
+    fields:
+      - { name: title, label: Title, widget: string, i18n: true }
+      - name: urlname
+        label: Web address
+        hint: "Short, Latin letters and hyphens only, e.g. old-manuscript."
+        widget: string
+        pattern: ['^[a-z0-9][a-z0-9-]*$', 'Use lowercase Latin letters, numbers and hyphens only']
+        i18n: duplicate
+      - { name: poet, label: "Poet (leave empty if it's your own poem)", widget: string, required: false, i18n: true }
+      - { name: date, label: Date, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD", i18n: duplicate }
+      - { name: featured, label: Feature on the front page, widget: boolean, default: false, required: false, i18n: duplicate }
+      - { name: draft, label: Draft (hidden from readers), widget: boolean, default: false, required: false, i18n: duplicate }
+      - name: body
+        label: Poem
+        widget: text
+        hint: "One line per line of verse. An empty line starts a new stanza. Start a line with spaces to indent it."
+        i18n: true
+      - { name: commentary, label: Commentary (optional, shown under the poem), widget: markdown, required: false, i18n: true }
+      - { name: translator_note, label: "Translator's note (English only, optional)", widget: text, required: false, i18n: true }
+
+  - name: pages
+    label: Pages
+    files:
+      - name: about
+        label: About the journal
+        file: content/pages/about.{{locale}}.md
+        format: json-frontmatter
+        i18n: true
+        fields:
+          - { name: title, label: Title, widget: string, i18n: true }
+          - { name: body, label: Text, widget: markdown, i18n: true }
+
+  - name: settings
+    label: Site settings
+    files:
+      - name: site
+        label: Name, tagline and discussion settings
+        file: content/settings.json
+        format: json
+        i18n: false
+        fields:
+          - { name: title_ka, label: Journal name (Georgian), widget: string }
+          - { name: title_en, label: Journal name (English), widget: string }
+          - { name: tagline_ka, label: Tagline (Georgian), widget: string }
+          - { name: tagline_en, label: Tagline (English), widget: string }
+          - { name: author_ka, label: Your name (Georgian), widget: string }
+          - { name: author_en, label: Your name (English), widget: string }
+          - { name: site_url, label: "Site address, e.g. https://palimpsest.pages.dev", widget: string, required: false }
+          - { name: require_comment_review, label: Hold new comments until I approve them, widget: boolean, default: false, required: false }
