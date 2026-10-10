@@ -22,9 +22,9 @@ i18n:
 
 collections:
   - name: essays
-    label: Essays & criticism
+    label: Essays
     label_singular: Essay
-    description: Philosophy, prose and criticism. Write the Georgian first, then switch to English in the language menu at the top of the editor.
+    description: Philosophy and prose. Write the Georgian first, then switch to English in the language menu at the top of the editor.
     folder: content/essays
     create: true
     format: json-frontmatter
@@ -54,7 +54,6 @@ collections:
         options:
           - { label: "Philosophy / ფილოსოფია", value: philosophy }
           - { label: "Prose / პროზა", value: prose }
-          - { label: "Criticism / კრიტიკა", value: criticism }
         default: philosophy
         i18n: duplicate
       - { name: featured, label: Feature on the front page, widget: boolean, default: false, required: false, i18n: duplicate }

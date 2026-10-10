@@ -85,7 +85,7 @@ function loadWorks() {
       works.push({
         slug,
         kind,
-        section: kind === 'poem' ? 'poetry' : (ka.section || 'philosophy'),
+        section: kind === 'poem' ? 'poetry' : (['philosophy', 'prose'].includes(ka.section) ? ka.section : 'prose'),
         date: String(ka.date || '').slice(0, 10) || '1970-01-01',
         featured: ka.featured === true || ka.featured === 'true',
         versions: v,

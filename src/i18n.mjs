@@ -1,7 +1,7 @@
 // Interface wording in both languages. Article text lives in /content.
 export const LANGS = ['ka', 'en'];
 
-export const SECTIONS = ['philosophy', 'prose', 'poetry', 'criticism'];
+export const SECTIONS = ['philosophy', 'prose', 'poetry'];
 
 export const UI = {
   ka: {
