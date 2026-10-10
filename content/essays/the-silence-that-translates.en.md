@@ -2,7 +2,7 @@
   "title": "\"Mdgmuri\" Jemal Karchkhadze",
   "subtitle": "Analysis",
   "urlname": "analysis",
-  "date": "2026-10-04",
+  "date": "2025-08-07",
   "section": "prose",
   "featured": true,
   "draft": false,
