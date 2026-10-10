@@ -107,6 +107,7 @@ collections:
 
   - name: pages
     label: Pages
+    i18n: true
     files:
       - name: about
         label: About the journal
