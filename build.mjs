@@ -174,6 +174,7 @@ function build() {
 
   const site = loadSettings();
   const works = loadWorks();
+  site._soon = ['philosophy', 'prose', 'poetry'].filter((s) => !works.some((w) => w.section === s));
   const about = loadAbout();
 
   copyDir(path.join(ROOT, 'public'), OUT);

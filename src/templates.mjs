@@ -83,7 +83,7 @@ function siteHeader({ lang, site, counterpart, compact = true, current = '' }) {
   <div class="frame head-row">
     <a class="wordmark" href="/${lang}/" ${compact ? '' : 'aria-current="page"'}>${esc(site[`title_${lang}`])}</a>
     <nav class="nav" aria-label="${esc(t.home)}">
-      <ul>${nav.map((n) => `<li><a href="${n.href}"${current === n.key ? ' aria-current="page"' : ''}>${esc(n.label)}</a></li>`).join('')}</ul>
+      <ul>${nav.map((n) => `<li><a href="${n.href}"${current === n.key ? ' aria-current="page"' : ''}>${esc(n.label)}${(site._soon || []).includes(n.key) ? `<sup class="soon-mark">${esc(t.soon)}</sup>` : ''}</a></li>`).join('')}</ul>
     </nav>
     <div class="head-tools">
       <a class="lang-switch" href="${counterpart || `/${o}/`}" hreflang="${o}" lang="${o}" data-lang-link aria-label="${esc(t.switchToLabel)}">${esc(t.switchTo)}</a>
@@ -245,7 +245,7 @@ export function archivePage({ lang, site, works }) {
   <div class="archive-body">
     <div class="filters">
       <div class="chips" role="group" aria-label="${esc(t.archive)}">
-        ${filters.map((f) => `<button type="button" class="chip" data-filter="${f.key}" aria-pressed="${f.key === 'all'}">${esc(f.label)}</button>`).join('')}
+        ${filters.map((f) => `<button type="button" class="chip${(site._soon || []).includes(f.key) ? ' is-soon' : ''}" data-filter="${f.key}" aria-pressed="${f.key === 'all'}">${esc(f.label)}</button>`).join('')}
       </div>
       <label class="search"><span class="visually-hidden">${esc(t.search)}</span>
         <input type="search" data-search placeholder="${esc(t.searchPlaceholder)}" autocomplete="off"></label>
@@ -254,6 +254,13 @@ export function archivePage({ lang, site, works }) {
       .map(([y, ws]) => `<section class="year" data-year><h2 class="year-num">${y}</h2><ol class="rows">${ws.map((w) => row(w, lang)).join('')}</ol></section>`)
       .join('')}
     <p class="empty" data-empty hidden>${esc(t.noResults)}</p>
+    ${(site._soon || []).map((s) => `<div class="soon" data-soon="${s}" hidden>
+      <span class="soon-ghost" aria-hidden="true">${esc(t.sections[s])}</span>
+      <p class="soon-orn" aria-hidden="true">⁂</p>
+      <h2 class="soon-title">${esc(t.soonTitle(t.sections[s]))}</h2>
+      <p class="soon-body">${esc(t.soonBody)}</p>
+      <p class="soon-link"><button type="button" class="linkish" data-filter-go="all">${esc(t.soonBack)}</button></p>
+    </div>`).join('')}
   </div>
 </section>`;
   return page(
