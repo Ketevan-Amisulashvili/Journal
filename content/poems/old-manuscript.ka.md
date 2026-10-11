@@ -2,7 +2,7 @@
   "title": "\"შენ სად იცინი - გული მუნ ფეთქავს\"",
   "urlname": "poem",
   "poet": "",
-  "date": "2025-07-23",
+  "date": "2024-07-23",
   "featured": true,
   "draft": false,
   "commentary": "",
