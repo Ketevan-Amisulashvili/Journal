@@ -2,7 +2,7 @@
   "title": "\"Three Comrades\" Erich Maria Remarque",
   "subtitle": "Plot, Analysis",
   "urlname": "plot-analysis",
-  "date": "2025-08-25",
+  "date": "2025-06-25",
   "section": "prose",
   "featured": true,
   "draft": false,

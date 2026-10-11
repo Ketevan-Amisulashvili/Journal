@@ -2,7 +2,7 @@
   "title": "\"სამი მეგობარი\" ერიხ მარია რემარკი",
   "subtitle": "შინაარსი, ანალიზი",
   "urlname": "plot-analysis",
-  "date": "2025-08-25",
+  "date": "2025-06-25",
   "section": "prose",
   "featured": true,
   "draft": false,
