@@ -2,14 +2,14 @@
    Colour tokens first; every colour below comes from them. */
 
 :root {
-  --paper: #FBF9F5;
-  --ink: #1A1A1A;
-  --ink-2: #5E5850;      /* dates, captions, secondary text */
-  --ghost: #E7E1D6;      /* the faint under-text of the palimpsest */
-  --rule: #E3DDD2;
+  --paper: #F5EDDC;      /* cream paper */
+  --ink: #1F1B16;
+  --ink-2: #5F564A;      /* dates, captions, secondary text */
+  --ghost: #E6DAC2;      /* the faint under-text of the palimpsest */
+  --rule: #E0D3BA;
   --accent: #34418A;     /* iron-gall indigo: links and active states */
-  --accent-wash: #ECECF4;
-  --field: #FFFFFF;
+  --accent-wash: #E8E3E6;
+  --field: #FBF6EC;
   --danger: #8A2B2B;
 
   --serif: "Newsreader", "Noto Serif Georgian", Georgia, "Times New Roman", serif;
@@ -141,6 +141,34 @@ img { max-width: 100%; height: auto; }
   max-width: 100%; overflow: hidden;
 }
 .tagline { position: relative; margin: 1.25rem 0 0; font-size: clamp(1.1rem, 2vw, 1.35rem); font-style: italic; color: var(--ink-2); max-width: 32rem; }
+
+/* Faded picture in the front-page header */
+.masthead { position: relative; }
+.hero-figure {
+  position: absolute; z-index: 0; margin: 0; pointer-events: none;
+  right: clamp(1rem, 4vw, 2rem); top: 0; bottom: 0; width: min(46%, 30rem);
+}
+.hero-figure img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center 25%;
+  filter: grayscale(1) sepia(.35) contrast(.9);
+  opacity: .42; mix-blend-mode: multiply;
+  -webkit-mask-image: radial-gradient(ellipse 62% 70% at 50% 45%, #000 30%, transparent 75%);
+  mask-image: radial-gradient(ellipse 62% 70% at 50% 45%, #000 30%, transparent 75%);
+}
+.hero-figure figcaption {
+  position: absolute; right: 0; bottom: 1rem; font-family: var(--sans); font-size: .75rem;
+  color: var(--ink-2); font-style: italic;
+}
+.masthead .lockup, .masthead .tagline { position: relative; z-index: 1; }
+.has-hero .lockup-ghost { opacity: .7; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .hero-figure img { mix-blend-mode: normal; opacity: .2; filter: grayscale(1) contrast(.85); }
+}
+:root[data-theme="dark"] .hero-figure img { mix-blend-mode: normal; opacity: .2; filter: grayscale(1) contrast(.85); }
+@media (max-width: 760px) {
+  .hero-figure { width: 70%; right: 0; opacity: .85; }
+  .hero-figure figcaption { right: 1rem; bottom: .5rem; }
+}
 
 .opening { border-top: 1px solid var(--ink); padding-top: 1.75rem; padding-bottom: 3.5rem; }
 .opening-title { font-size: clamp(2.1rem, 4.6vw, 3.4rem); line-height: 1.05; font-weight: 400; margin: 0; letter-spacing: -.012em; max-width: 18ch; }

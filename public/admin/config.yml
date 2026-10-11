@@ -132,5 +132,8 @@ collections:
           - { name: tagline_en, label: Tagline (English), widget: string }
           - { name: author_ka, label: Your name (Georgian), widget: string }
           - { name: author_en, label: Your name (English), widget: string }
+          - { name: hero_image, label: "Front-page picture (shown faded behind the journal name)", widget: image, required: false }
+          - { name: hero_caption_ka, label: "Picture caption (Georgian), e.g. ჯემალ ქარჩხაძე", widget: string, required: false }
+          - { name: hero_caption_en, label: "Picture caption (English), e.g. Jemal Karchkhadze", widget: string, required: false }
           - { name: site_url, label: "Site address, e.g. https://palimpsest.pages.dev", widget: string, required: false }
           - { name: require_comment_review, label: Hold new comments until I approve them, widget: boolean, default: false, required: false }

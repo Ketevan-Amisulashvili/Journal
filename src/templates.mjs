@@ -48,7 +48,7 @@ ${alt}
 <meta property="og:type" content="${type}">
 <meta property="og:site_name" content="${esc(siteName)}">
 <meta property="og:locale" content="${lang === 'ka' ? 'ka_GE' : 'en_GB'}">
-<meta name="theme-color" content="#FBF9F5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#F5EDDC" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#1D1C1A" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="alternate" type="application/rss+xml" title="${esc(siteName)}" href="/${lang}/feed.xml">
@@ -203,7 +203,13 @@ export function homePage({ lang, site, works }) {
 </section>`;
   }
 
-  const main = `<section class="masthead frame" aria-label="${esc(site[`title_${lang}`])}">
+  const heroSrc = String(site.hero_image || '').trim();
+  const heroAlt = site[`hero_caption_${lang}`] || site.hero_caption_ka || '';
+  const hero = heroSrc
+    ? `<figure class="hero-figure"><img src="${esc(heroSrc)}" alt="${esc(heroAlt)}" loading="eager" decoding="async">${heroAlt ? `<figcaption>${esc(heroAlt)}</figcaption>` : ''}</figure>`
+    : '';
+  const main = `<section class="masthead frame${heroSrc ? ' has-hero' : ''}" aria-label="${esc(site[`title_${lang}`])}">
+  ${hero}
   <h1 class="lockup">
     <span class="lockup-ghost" lang="${o}" aria-hidden="true">${esc(site[`title_${o}`])}</span>
     <span class="lockup-title">${esc(site[`title_${lang}`])}</span>
@@ -403,7 +409,7 @@ export function rootPage({ site }) {
 <link rel="alternate" hreflang="x-default" href="/ka/">
 <script>(function(){var l='ka';try{var s=localStorage.getItem('pl-lang');if(s==='ka'||s==='en'){l=s;}else{var n=(navigator.languages&&navigator.languages[0])||navigator.language||'';l=/^ka/i.test(n)?'ka':(/^(en|de|fr|es|it|ru|uk|pl|nl|sv|tr)/i.test(n)?'en':'ka');}}catch(e){}location.replace('/'+l+'/');})();</script>
 <meta http-equiv="refresh" content="2; url=/ka/">
-<style>body{font:18px/1.5 Georgia,serif;background:#FBF9F5;color:#1A1A1A;display:grid;place-items:center;min-height:90vh}a{color:#34418A}</style>
+<style>body{font:18px/1.5 Georgia,serif;background:#F5EDDC;color:#1A1A1A;display:grid;place-items:center;min-height:90vh}a{color:#34418A}</style>
 </head>
 <body><p><a href="/ka/" hreflang="ka">${esc(site.title_ka)}</a> / <a href="/en/" hreflang="en">${esc(site.title_en)}</a></p></body>
 </html>`;
