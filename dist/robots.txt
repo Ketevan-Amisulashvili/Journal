@@ -1,4 +1,0 @@
-User-agent: *
-Disallow: /admin/
-Disallow: /moderate/
-Sitemap: https://journal-d73.pages.dev/sitemap.xml

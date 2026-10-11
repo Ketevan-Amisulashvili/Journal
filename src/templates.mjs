@@ -353,6 +353,13 @@ export function workPage({ lang, site, work }) {
   </div>
   ${twin}
   <div class="after">
+    <div class="appreciate" data-like-piece data-slug="${esc(work.slug)}" hidden>
+      <p class="appreciate-q" data-like-prompt data-thanks="${esc(t.likeThanks)}">${esc(t.likePrompt)}</p>
+      <button type="button" class="like-btn big" data-like aria-pressed="false" aria-label="${esc(t.like)}">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.3-9.2C1.5 8.1 3.6 4.5 7.2 4.5c2 0 3.6 1.1 4.8 2.8 1.2-1.7 2.8-2.8 4.8-2.8 3.6 0 5.7 3.6 4.5 6.8-1.8 4.6-9.3 9.2-9.3 9.2z"/></svg>
+        <span class="like-word">${esc(t.like)}</span><span class="like-count" data-like-count></span>
+      </button>
+    </div>
     ${notesList(r.notes, '', lang)}
     ${extra.join('')}
   </div>
@@ -376,7 +383,8 @@ export function workPage({ lang, site, work }) {
     },
     main,
     `<script>window.PL_COMMENTS=${JSON.stringify(cui).replace(/</g, '\\u003c')};</script>
-<script src="/assets/comments.js?v=${site._v}" defer></script>`,
+<script src="/assets/comments.js?v=${site._v}" defer></script>
+<script src="/assets/likes.js?v=${site._v}" defer></script>`,
   );
 }
 

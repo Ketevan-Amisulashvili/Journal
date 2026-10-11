@@ -337,6 +337,26 @@ img { max-width: 100%; height: auto; }
 .c-body { margin: .45rem 0 .35rem; font-size: 1.05rem; line-height: 1.6; overflow-wrap: anywhere; }
 .c-body p { margin: 0 0 .7em; }
 .c-reply-btn { font: 500 .8125rem/1 var(--sans); color: var(--accent); background: none; border: 0; padding: .3rem 0; cursor: pointer; }
+.c-row { display: flex; align-items: center; gap: 1.1rem; }
+
+/* Likes */
+.like-btn { display: inline-flex; align-items: center; gap: .4rem; font: 500 .8125rem/1 var(--sans); color: var(--ink-2); background: none; border: 0; padding: .3rem 0; cursor: pointer; }
+.like-btn svg { width: 1.05rem; height: 1.05rem; fill: none; stroke: currentColor; stroke-width: 1.6; transition: fill .15s, stroke .15s; }
+.like-btn:hover { color: var(--danger); }
+.like-btn.on { color: var(--danger); }
+.like-btn.on svg { fill: currentColor; }
+.like-btn[disabled] { cursor: progress; }
+.like-btn.big { border: 1px solid var(--rule); border-radius: 999px; padding: .6rem 1.05rem; font-size: .875rem; color: var(--ink); background: var(--field); }
+.like-btn.big svg { width: 1.2rem; height: 1.2rem; }
+.like-btn.big:hover, .like-btn.big.on { border-color: currentColor; color: var(--danger); }
+.like-btn.pop svg { animation: like-pop .35s ease-out; }
+@keyframes like-pop { 40% { transform: scale(1.35); } 100% { transform: scale(1); } }
+.like-count:empty { display: none; }
+.like-btn.big .like-count { padding-left: .55rem; margin-left: .15rem; border-left: 1px solid var(--rule); }
+.appreciate { margin-top: 2.75rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); display: flex; align-items: center; gap: 1rem 1.25rem; flex-wrap: wrap; }
+.appreciate-q { margin: 0; font-style: italic; color: var(--ink-2); }
+.appreciate-q:lang(ka), :lang(ka) > .appreciate-q { font-style: normal; }
+.focus-mode .appreciate { display: none; }
 .c-children { list-style: none; margin: .75rem 0 0; padding: 0 0 0 1.25rem; border-left: 1px solid var(--rule); }
 .c-children .c-item { padding: .8rem 0; }
 .c-children .c-item:first-child { padding-top: .2rem; }
@@ -440,6 +460,7 @@ img { max-width: 100%; height: auto; }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .like-btn.pop svg { animation: none; }
   * { transition: none !important; scroll-behavior: auto !important; }
 }
 

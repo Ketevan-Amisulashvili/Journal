@@ -1,17 +1,22 @@
 // GET  /api/comments?slug=…   published comments for one piece
 // POST /api/comments          add a comment or a reply
-import { ensureSchema, json, missingSetup, siteInfo, hashIp, cleanText, SLUG_RE, isModerator } from '../../shared/discussion.js';
+import { ensureSchema, json, missingSetup, siteInfo, hashIp, cleanText, SLUG_RE, isModerator, visitorId } from '../../shared/discussion.js';
 
 export async function onRequestGet({ request, env }) {
   const problem = missingSetup(env);
   if (problem) return json({ error: problem }, 503);
-  const slug = new URL(request.url).searchParams.get('slug') || '';
+  const url = new URL(request.url);
+  const slug = url.searchParams.get('slug') || '';
   if (!SLUG_RE.test(slug)) return json({ error: 'Unknown piece.' }, 400);
   await ensureSchema(env.DB);
+  const visitor = visitorId(url.searchParams.get('v'), await hashIp(request, env));
   const { results } = await env.DB
-    .prepare(`SELECT id, parent_id, name, body, lang, is_author, created_at FROM comments
-              WHERE slug = ?1 AND status = 'published' ORDER BY created_at ASC, id ASC LIMIT 500`)
-    .bind(slug)
+    .prepare(`SELECT c.id, c.parent_id, c.name, c.body, c.lang, c.is_author, c.created_at,
+                (SELECT COUNT(*) FROM likes l WHERE l.target = 'c:' || c.id) AS likes,
+                EXISTS (SELECT 1 FROM likes l WHERE l.target = 'c:' || c.id AND l.visitor = ?2) AS liked
+              FROM comments c
+              WHERE c.slug = ?1 AND c.status = 'published' ORDER BY c.created_at ASC, c.id ASC LIMIT 500`)
+    .bind(slug, visitor)
     .all();
   return json({ comments: results || [] });
 }

@@ -16,6 +16,16 @@ const SCHEMA = [
   )`,
   `CREATE INDEX IF NOT EXISTS comments_by_slug ON comments (slug, status, created_at)`,
   `CREATE INDEX IF NOT EXISTS comments_by_ip ON comments (ip_hash, created_at)`,
+  `CREATE TABLE IF NOT EXISTS likes (
+    target TEXT NOT NULL,
+    slug TEXT NOT NULL,
+    visitor TEXT NOT NULL,
+    ip_hash TEXT,
+    created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
+    PRIMARY KEY (target, visitor)
+  )`,
+  `CREATE INDEX IF NOT EXISTS likes_by_slug ON likes (slug, target)`,
+  `CREATE INDEX IF NOT EXISTS likes_by_ip ON likes (ip_hash, created_at)`,
 ];
 
 let ready = false;
@@ -81,6 +91,13 @@ export function cleanText(s, max) {
     .replace(/\n{3,}/g, '\n\n')
     .trim()
     .slice(0, max);
+}
+
+// A random id each browser keeps, so one reader counts once. Falls back to the network address.
+export const VISITOR_RE = /^[a-z0-9]{16,40}$/;
+export function visitorId(raw, ipHash) {
+  const v = String(raw || '').toLowerCase();
+  return VISITOR_RE.test(v) ? v : `ip-${ipHash}`;
 }
 
 export const SLUG_RE = /^[a-z0-9][a-z0-9-]{0,119}$/;

@@ -18,10 +18,15 @@ export async function onRequestGet({ request, env }) {
   if (denied) return denied;
   await ensureSchema(env.DB);
   const { results } = await env.DB
-    .prepare(`SELECT id, slug, parent_id, name, body, lang, status, is_author, created_at FROM comments
-              ORDER BY CASE status WHEN 'pending' THEN 0 ELSE 1 END, created_at DESC, id DESC LIMIT 300`)
+    .prepare(`SELECT c.id, c.slug, c.parent_id, c.name, c.body, c.lang, c.status, c.is_author, c.created_at,
+                (SELECT COUNT(*) FROM likes l WHERE l.target = 'c:' || c.id) AS likes
+              FROM comments c
+              ORDER BY CASE c.status WHEN 'pending' THEN 0 ELSE 1 END, c.created_at DESC, c.id DESC LIMIT 300`)
     .all();
-  return json({ comments: results || [] });
+  const pieces = await env.DB
+    .prepare("SELECT slug, COUNT(*) AS likes FROM likes WHERE target LIKE 'p:%' GROUP BY slug ORDER BY likes DESC")
+    .all();
+  return json({ comments: results || [], pieceLikes: pieces.results || [] });
 }
 
 export async function onRequestPost({ request, env }) {
@@ -37,6 +42,7 @@ export async function onRequestPost({ request, env }) {
     case 'delete': {
       if (!id) return json({ error: 'Missing id.' }, 400);
       // Removing a comment also removes the replies under it.
+      await env.DB.prepare("DELETE FROM likes WHERE target IN (SELECT 'c:' || id FROM comments WHERE id = ?1 OR parent_id = ?1)").bind(id).run();
       await env.DB.prepare('DELETE FROM comments WHERE id = ?1 OR parent_id = ?1').bind(id).run();
       return json({ ok: true });
     }
