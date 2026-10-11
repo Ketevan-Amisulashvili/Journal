@@ -157,8 +157,7 @@ img { max-width: 100%; height: auto; }
 }
 .hero-figure figcaption {
   position: absolute; right: 18%; bottom: 1.4rem; font-family: var(--serif); font-size: .7rem;
-  color: var(--ink-2); font-style: italic; letter-spacing: .02em; opacity: .85;
-  transform: rotate(-6deg); transform-origin: right bottom;
+  color: var(--ink-2); font-style: italic; font-synthesis: style; letter-spacing: .02em; opacity: .85;
 }
 .masthead .lockup, .masthead .tagline { position: relative; z-index: 1; }
 .has-hero .lockup-ghost { opacity: .7; }
