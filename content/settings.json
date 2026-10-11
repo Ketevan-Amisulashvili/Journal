@@ -6,5 +6,8 @@
   "author_ka": "ქეთევან ამისულაშვილი",
   "author_en": "Ketevan Amisulashvili",
   "site_url": "https://journal-d73.pages.dev/",
-  "require_comment_review": false
+  "require_comment_review": false,
+  "hero_image": "/images/uploads/jemal-karchkhadze.jpg",
+  "hero_caption_ka": "ჯემალ ქარჩხაძე",
+  "hero_caption_en": "Jemal Karchkhadze"
 }
