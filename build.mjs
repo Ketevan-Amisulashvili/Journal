@@ -92,6 +92,18 @@ function loadWorks() {
       });
     }
   }
+  // An essay and a poem can't share a web address: give the later one its own.
+  const used = new Set();
+  for (const w of works) {
+    if (used.has(w.slug)) {
+      let n = 2;
+      while (used.has(`${w.slug}-${w.kind}${n > 2 ? `-${n}` : ''}`)) n++;
+      const fresh = `${w.slug}-${w.kind}${n > 2 ? `-${n}` : ''}`;
+      warn(`"${w.slug}" is used by more than one piece; the ${w.kind} "${w.versions.ka.title}" is published at /${fresh}/ instead. Rename one of them to avoid confusion.`);
+      w.slug = fresh;
+    }
+    used.add(w.slug);
+  }
   works.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : a.slug.localeCompare(b.slug)));
 
   for (const w of works) {
