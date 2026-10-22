@@ -15,6 +15,27 @@
 
   var box = document.querySelector('[data-like-piece]');
   if (!box) return;
+
+  // Count this visit (once per day per browser), unless this is the author's own browser.
+  (function countView() {
+    var owner = false;
+    try { owner = localStorage.getItem('pl-owner') === '1'; } catch (e) {}
+    if (owner) return;
+    var sent = false;
+    function send() {
+      if (sent || document.visibilityState !== 'visible') return;
+      sent = true;
+      fetch('/api/view', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug: box.getAttribute('data-slug'), v: window.plVisitor(), lang: document.documentElement.lang }),
+        keepalive: true,
+      }).catch(function () {});
+    }
+    // Wait a few seconds so quick bounces and link previews aren't counted.
+    setTimeout(send, 4000);
+    document.addEventListener('visibilitychange', function () { setTimeout(send, 4000); });
+  })();
   var slug = box.getAttribute('data-slug');
   var btn = box.querySelector('[data-like]');
   var countEl = box.querySelector('[data-like-count]');

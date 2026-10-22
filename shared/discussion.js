@@ -36,6 +36,19 @@ const SCHEMA = [
     PRIMARY KEY (comment_id, lang)
   )`,
   `CREATE INDEX IF NOT EXISTS translations_by_time ON translations (created_at)`,
+  `CREATE TABLE IF NOT EXISTS views (
+    slug TEXT NOT NULL,
+    day TEXT NOT NULL,
+    n INTEGER NOT NULL DEFAULT 0,
+    n_en INTEGER NOT NULL DEFAULT 0,
+    PRIMARY KEY (slug, day)
+  )`,
+  `CREATE TABLE IF NOT EXISTS view_seen (
+    slug TEXT NOT NULL,
+    visitor TEXT NOT NULL,
+    day TEXT NOT NULL,
+    PRIMARY KEY (slug, visitor, day)
+  )`,
 ];
 
 let ready = false;

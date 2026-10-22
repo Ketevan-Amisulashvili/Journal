@@ -34,9 +34,17 @@
   .reply-box textarea { min-height: 6rem; }
   .msg { font-family: var(--sans); font-size: .875rem; color: var(--ink-2); }
   .msg.error { color: var(--danger); }
-  .likes-box { font-family: var(--sans); font-size: .875rem; margin: 0 0 1.25rem; }
-  .likes-box summary { cursor: pointer; font-weight: 600; }
-  .likes-box ol { margin: .6rem 0 0; padding-left: 1.2rem; color: var(--ink-2); }
+  .stats { margin: 0 0 2.5rem; }
+  .stats h2 { font-weight: 400; font-size: 1.6rem; margin: 0 0 .25rem; }
+  .stats-note { font-family: var(--sans); font-size: .8125rem; color: var(--ink-2); margin: 0 0 1rem; }
+  .stats-wrap { overflow-x: auto; }
+  .stats table { width: 100%; border-collapse: collapse; font-family: var(--sans); font-size: .875rem; }
+  .stats th { text-align: left; font-weight: 600; color: var(--ink-2); font-size: .75rem; padding: .5rem .6rem; border-bottom: 1px solid var(--ink); white-space: nowrap; }
+  .stats td { padding: .55rem .6rem; border-bottom: 1px solid var(--rule); }
+  .stats td a { color: var(--ink); text-decoration: none; font-family: var(--serif); font-size: 1rem; }
+  .stats td a:hover { text-decoration: underline; }
+  .stats .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .stats tfoot td { font-weight: 600; border-bottom: 0; border-top: 1px solid var(--ink); }
   select { font: 500 .8125rem var(--sans); color: var(--ink); background: var(--field); border: 1px solid var(--rule); border-radius: 999px; padding: .45rem .8rem; }
 </style>
 </head>
@@ -66,7 +74,15 @@
       <button class="btn quiet small" type="button" id="logout">Sign out</button>
     </div>
     <p class="msg" id="panel-msg" role="status"></p>
-    <details id="likes-box" class="likes-box" hidden><summary>Likes per piece</summary><ol id="likes-list"></ol></details>
+    <section class="stats" id="stats" hidden>
+      <h2>Readers</h2>
+      <p class="stats-note">Each reader counts once per piece per day. Your own visits are not counted on this browser.</p>
+      <div class="stats-wrap"><table>
+        <thead><tr><th>Piece</th><th class="num">Views</th><th class="num">Last 7 days</th><th class="num">Today</th><th class="num">In English</th><th class="num">♥</th><th class="num">Comments</th></tr></thead>
+        <tbody id="stats-body"></tbody>
+        <tfoot><tr id="stats-total"></tr></tfoot>
+      </table></div>
+    </section>
     <div id="list"></div>
   </section>
 </main>
@@ -172,13 +188,42 @@
     });
   }
 
+  function renderStats(d) {
+    var rows = {};
+    function row(slug) { return rows[slug] || (rows[slug] = { slug: slug, views: 0, week: 0, today: 0, en: 0, likes: 0, comments: 0 }); }
+    Object.keys(site.works || {}).forEach(row);
+    (d.views || []).forEach(function (v) { var r = row(v.slug); r.views = v.views || 0; r.week = v.week || 0; r.today = v.today || 0; r.en = v.views_en || 0; });
+    (d.pieceLikes || []).forEach(function (v) { row(v.slug).likes = v.likes || 0; });
+    (d.commentCounts || []).forEach(function (v) { row(v.slug).comments = v.comments || 0; });
+    var list = Object.keys(rows).map(function (k) { return rows[k]; })
+      .filter(function (r) { return site.works && site.works[r.slug] || r.views || r.likes; })
+      .sort(function (a, b) { return b.views - a.views || b.likes - a.likes; });
+    var body = $('stats-body');
+    body.innerHTML = '';
+    var tot = { views: 0, week: 0, today: 0, en: 0, likes: 0, comments: 0 };
+    list.forEach(function (r) {
+      var tr = document.createElement('tr');
+      var name = el('td');
+      var a = el('a', null, title(r.slug));
+      a.href = '/ka/' + r.slug + '/'; a.target = '_blank';
+      name.appendChild(a); tr.appendChild(name);
+      ['views', 'week', 'today', 'en', 'likes', 'comments'].forEach(function (k) {
+        tr.appendChild(el('td', 'num', String(r[k]))); tot[k] += r[k];
+      });
+      body.appendChild(tr);
+    });
+    var foot = $('stats-total');
+    foot.innerHTML = '';
+    foot.appendChild(el('td', null, 'All pieces'));
+    ['views', 'week', 'today', 'en', 'likes', 'comments'].forEach(function (k) { foot.appendChild(el('td', 'num', String(tot[k]))); });
+    $('stats').hidden = !list.length;
+  }
+
   function load() {
     return api('GET').then(function (d) {
       all = d.comments || [];
-      var lk = d.pieceLikes || [], box = $('likes-box'), ll = $('likes-list');
-      ll.innerHTML = '';
-      lk.forEach(function (p) { ll.appendChild(el('li', null, title(p.slug) + ': ♥ ' + p.likes)); });
-      box.hidden = !lk.length;
+      try { localStorage.setItem('pl-owner', '1'); } catch (x) {}
+      renderStats(d);
       $('login').hidden = true;
       $('panel').hidden = false;
       var pending = all.filter(function (c) { return c.status === 'pending'; }).length;

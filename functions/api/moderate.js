@@ -26,7 +26,18 @@ export async function onRequestGet({ request, env }) {
   const pieces = await env.DB
     .prepare("SELECT slug, COUNT(*) AS likes FROM likes WHERE target LIKE 'p:%' GROUP BY slug ORDER BY likes DESC")
     .all();
-  return json({ comments: results || [], pieceLikes: pieces.results || [] });
+  const stats = await env.DB
+    .prepare(`SELECT slug,
+                SUM(n) AS views,
+                SUM(n_en) AS views_en,
+                SUM(CASE WHEN day >= date('now', '-6 days') THEN n ELSE 0 END) AS week,
+                SUM(CASE WHEN day = date('now') THEN n ELSE 0 END) AS today
+              FROM views GROUP BY slug`)
+    .all();
+  const counts = await env.DB
+    .prepare("SELECT slug, COUNT(*) AS comments FROM comments WHERE status = 'published' GROUP BY slug")
+    .all();
+  return json({ comments: results || [], pieceLikes: pieces.results || [], views: stats.results || [], commentCounts: counts.results || [] });
 }
 
 export async function onRequestPost({ request, env }) {
