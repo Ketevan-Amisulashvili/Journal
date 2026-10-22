@@ -75,6 +75,66 @@
       .then(function () { btn.disabled = false; });
   }
 
+  // ---- Translation of comments (Georgian <-> English)
+  var translationOn = true;
+  function scriptOf(text) {
+    var ka = (text.match(/[\u10A0-\u10FF\u1C90-\u1CBF]/g) || []).length;
+    var latin = (text.match(/[A-Za-z]/g) || []).length;
+    return ka >= latin ? 'ka' : 'en';
+  }
+  function translateButton(c, li) {
+    var to = scriptOf(c.body) === 'ka' ? 'en' : 'ka';
+    var b = el('button', 'c-tr-btn', to === 'en' ? T.toEn : T.toKa);
+    b.type = 'button';
+    b.setAttribute('aria-expanded', 'false');
+    var box = null, cached = null;
+    b.addEventListener('click', function () {
+      var body = li.querySelector(':scope > .c-body');
+      if (box) {
+        var showing = !box.hidden;
+        box.hidden = showing;
+        body.hidden = !showing;
+        b.textContent = showing ? (to === 'en' ? T.toEn : T.toKa) : T.showOriginal;
+        b.setAttribute('aria-expanded', String(!showing));
+        return;
+      }
+      b.disabled = true;
+      b.textContent = T.translating;
+      fetch('/api/translate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: c.id }),
+      }).then(function (r) {
+        return r.json().catch(function () { return {}; }).then(function (d) { return { ok: r.ok, d: d }; });
+      }).then(function (res) {
+        b.disabled = false;
+        if (!res.ok || !res.d.text) {
+          if (res.d && res.d.code === 'no-ai') { b.remove(); return; }
+          b.textContent = to === 'en' ? T.toEn : T.toKa;
+          var err = el('p', 'c-status error', T.translateFailed);
+          li.insertBefore(err, b.parentNode);
+          setTimeout(function () { err.remove(); }, 4000);
+          return;
+        }
+        cached = res.d.text;
+        box = el('div', 'c-translation');
+        box.setAttribute('lang', to);
+        box.appendChild(el('p', 'c-tr-label', to === 'en' ? T.machineEn : T.machineKa));
+        var tb = bodyNode(cached);
+        tb.className = 'c-tr-body';
+        box.appendChild(tb);
+        body.parentNode.insertBefore(box, body.nextSibling);
+        body.hidden = true;
+        b.textContent = T.showOriginal;
+        b.setAttribute('aria-expanded', 'true');
+      }).catch(function () {
+        b.disabled = false;
+        b.textContent = to === 'en' ? T.toEn : T.toKa;
+      });
+    });
+    return b;
+  }
+
   var list = el('ol', 'c-list');
   var status = el('p', 'c-status', T.loading);
   root.appendChild(status);
@@ -104,6 +164,7 @@
     btn.type = 'button';
     btn.addEventListener('click', function () { openReply(li, depth === 0 ? c.id : c.parent_id, c.name); });
     row.appendChild(btn);
+    if (translationOn) row.appendChild(translateButton(c, li));
     li.appendChild(row);
     if (c.children && c.children.length) {
       var ul = el('ol', 'c-children');

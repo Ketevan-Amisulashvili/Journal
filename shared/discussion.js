@@ -26,6 +26,16 @@ const SCHEMA = [
   )`,
   `CREATE INDEX IF NOT EXISTS likes_by_slug ON likes (slug, target)`,
   `CREATE INDEX IF NOT EXISTS likes_by_ip ON likes (ip_hash, created_at)`,
+  `CREATE TABLE IF NOT EXISTS translations (
+    comment_id INTEGER NOT NULL,
+    lang TEXT NOT NULL,
+    text TEXT NOT NULL,
+    model TEXT,
+    ip_hash TEXT,
+    created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ','now')),
+    PRIMARY KEY (comment_id, lang)
+  )`,
+  `CREATE INDEX IF NOT EXISTS translations_by_time ON translations (created_at)`,
 ];
 
 let ready = false;

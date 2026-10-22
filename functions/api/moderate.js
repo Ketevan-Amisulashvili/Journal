@@ -43,6 +43,7 @@ export async function onRequestPost({ request, env }) {
       if (!id) return json({ error: 'Missing id.' }, 400);
       // Removing a comment also removes the replies under it.
       await env.DB.prepare("DELETE FROM likes WHERE target IN (SELECT 'c:' || id FROM comments WHERE id = ?1 OR parent_id = ?1)").bind(id).run();
+      await env.DB.prepare('DELETE FROM translations WHERE comment_id IN (SELECT id FROM comments WHERE id = ?1 OR parent_id = ?1)').bind(id).run();
       await env.DB.prepare('DELETE FROM comments WHERE id = ?1 OR parent_id = ?1').bind(id).run();
       return json({ ok: true });
     }

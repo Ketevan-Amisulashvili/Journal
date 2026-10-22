@@ -52,7 +52,15 @@ const ASSETS = {
   },
 };
 
-const env = { DB, ASSETS, ADMIN_PASSWORD: process.env.ADMIN_PASSWORD || 'local-password' };
+const FAKE_AI = {
+  // Stand-in for Workers AI in local previews: marks the text instead of translating it.
+  async run(model, { messages }) {
+    const text = messages[messages.length - 1].content;
+    const to = /into Georgian/.test(messages[0].content) ? 'KA' : 'EN';
+    return { choices: [{ message: { content: `[${to} preview] ${text}` } }] };
+  },
+};
+const env = { DB, ASSETS, ADMIN_PASSWORD: process.env.ADMIN_PASSWORD || 'local-password', AI: process.env.NO_AI ? undefined : FAKE_AI };
 
 async function handleApi(req, res, url) {
   const name = url.pathname.replace(/^\/api\//, '').replace(/\/$/, '');

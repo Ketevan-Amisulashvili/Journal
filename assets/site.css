@@ -337,7 +337,14 @@ img { max-width: 100%; height: auto; }
 .c-body { margin: .45rem 0 .35rem; font-size: 1.05rem; line-height: 1.6; overflow-wrap: anywhere; }
 .c-body p { margin: 0 0 .7em; }
 .c-reply-btn { font: 500 .8125rem/1 var(--sans); color: var(--accent); background: none; border: 0; padding: .3rem 0; cursor: pointer; }
-.c-row { display: flex; align-items: center; gap: 1.1rem; }
+.c-row { display: flex; align-items: center; gap: .4rem 1.1rem; flex-wrap: wrap; }
+.c-tr-btn { font: 500 .8125rem/1 var(--sans); color: var(--ink-2); background: none; border: 0; padding: .3rem 0; cursor: pointer; text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: .2em; }
+.c-tr-btn:hover { color: var(--ink); text-decoration-color: currentColor; }
+.c-tr-btn[disabled] { cursor: progress; opacity: .7; }
+.c-translation { margin: .45rem 0 .35rem; padding-left: .85rem; border-left: 2px solid var(--accent-wash); }
+.c-tr-label { margin: 0 0 .2rem; font: italic 400 .75rem/1.4 var(--sans); color: var(--ink-2); }
+.c-tr-body { font-size: 1.05rem; line-height: 1.6; overflow-wrap: anywhere; }
+.c-tr-body p { margin: 0 0 .7em; }
 
 /* Likes */
 .like-btn { display: inline-flex; align-items: center; gap: .4rem; font: 500 .8125rem/1 var(--sans); color: var(--ink-2); background: none; border: 0; padding: .3rem 0; cursor: pointer; }
