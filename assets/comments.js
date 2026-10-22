@@ -109,7 +109,6 @@
       }).then(function (res) {
         b.disabled = false;
         if (!res.ok || !res.d.text) {
-          if (res.d && res.d.code === 'no-ai') { b.remove(); return; }
           b.textContent = to === 'en' ? T.toEn : T.toKa;
           var err = el('p', 'c-status error', T.translateFailed);
           li.insertBefore(err, b.parentNode);
@@ -280,6 +279,7 @@
     fetch('/api/comments?slug=' + encodeURIComponent(slug) + '&v=' + encodeURIComponent(visitor()), { headers: { Accept: 'application/json' } })
       .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
       .then(function (data) {
+        translationOn = data.translate !== false;
         render(data.comments || []);
         if (scrollTo) {
           var target = document.getElementById('c-' + scrollTo);

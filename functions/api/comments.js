@@ -18,7 +18,7 @@ export async function onRequestGet({ request, env }) {
               WHERE c.slug = ?1 AND c.status = 'published' ORDER BY c.created_at ASC, c.id ASC LIMIT 500`)
     .bind(slug, visitor)
     .all();
-  return json({ comments: results || [] });
+  return json({ comments: results || [], translate: !!env.AI });
 }
 
 export async function onRequestPost({ request, env }) {
